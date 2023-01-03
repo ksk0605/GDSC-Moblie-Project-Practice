@@ -1,18 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:gdsc_mobile_project/data.dart';
-import 'package:gdsc_mobile_project/models/auth_model.dart';
+import 'package:gdsc_mobile_project/models/auth_body.dart';
+import 'package:gdsc_mobile_project/models/code_check_body.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 class AuthController extends GetxController {
+  String url = baseUrl + 'api/v1/authorizations';
   String? code;
   String? message;
 
   Future<bool> getCode(String phoneNum) async {
     try {
       final res = await Dio().post(
-        baseUrl + 'api/v1/authorizations',
-        data: {"auth": AuthModel(phone: phoneNum).toJson()},
+        url,
+        data: {"auth": AuthBody(phone: phoneNum).toJson()},
       );
       print(res);
       code = res.data['result']['code'];
@@ -21,6 +23,37 @@ class AuthController extends GetxController {
       return true;
     } catch (e) {
       print(e);
+      return false;
+    }
+  }
+
+  Future<bool> checkCode(String phone, String code) async {
+    try {
+      print('asf');
+      final res = await Dio().get(url, queryParameters: {
+        "auth": CodeCheckBody(code: code, phone: phone).toJson()
+      });
+      if (res.data['status'] == 'ok') {
+        print(res.data);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> checkSignedUp(String phone) async {
+    try {
+      final res = await Dio().post(url + '/check_signed_up',
+          data: {'auth': AuthBody(phone: phone).toJson()});
+      if (res.data['status'] == 'ok') {
+        return res.data['terms_accepted_at'] == null ? false : true;
+      } else {
+        return false;
+      }
+    } catch (e) {
       return false;
     }
   }
