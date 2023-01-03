@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:gdsc_mobile_project/baseURL.dart';
+import 'package:gdsc_mobile_project/data.dart';
 import 'package:gdsc_mobile_project/models/auth_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';

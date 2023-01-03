@@ -21,6 +21,7 @@ class _PhoneNumberVerificationPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           "전화번호 인증",
           style: TextStyle(
@@ -65,10 +66,7 @@ class _PhoneNumberVerificationPageState
                   final isOk =
                       await _authController.getCode(_inputController.text);
                   if (isOk) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => CodeInputPage()),
-                    );
+                    Get.off(CodeInputPage());
                   }
                 }
               },

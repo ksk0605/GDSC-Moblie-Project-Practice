@@ -41,10 +41,7 @@ class CodeInputPage extends StatelessWidget {
               onPressed: () {
                 // HomePage로 이동
                 if (_authController.code! == _inputController.text) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+                  Get.off(HomePage());
                 } else {}
               },
             ),
