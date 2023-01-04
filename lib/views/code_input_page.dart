@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 
 class CodeInputPage extends StatelessWidget {
-  CodeInputPage({super.key});
+  CodeInputPage({super.key, required this.phone});
   final TextEditingController _inputController = TextEditingController();
   final _authController = Get.put(AuthController());
-
+  final String phone;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,10 +38,17 @@ class CodeInputPage extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               child: Text("완료", style: TextStyle(fontSize: 21)),
-              onPressed: () {
+              onPressed: () async {
                 // HomePage로 이동
-                if (_authController.code! == _inputController.text) {
-                  Get.off(HomePage());
+                if (_inputController.text.isNotEmpty) {
+                  final verify = await _authController.checkCode(
+                      phone, _inputController.text);
+                  if (verify) {
+                    final isSigned = await _authController.checkSignedUp(phone);
+                    if (isSigned) {
+                      Get.off(HomePage());
+                    }
+                  }
                 } else {}
               },
             ),
