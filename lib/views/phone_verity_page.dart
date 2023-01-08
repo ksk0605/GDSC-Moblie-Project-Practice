@@ -63,12 +63,11 @@ class _PhoneNumberVerificationPageState
               onPressed: () async {
                 // 입력한 전화번호가 유효할 시 코드입력페이지로 이동
                 if (_formKey.currentState!.validate()) {
-                  print('asfdasf');
                   final isOk =
                       await _authController.getCode(_inputController.text);
                   print(isOk);
                   if (isOk) {
-                    Get.off(CodeInputPage(phone: _inputController.text));
+                    Get.off(() => CodeInputPage(phone: _inputController.text));
                   }
                 }
               },

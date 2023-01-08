@@ -1,14 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gdsc_mobile_project/views/home_page.dart';
+import 'package:gdsc_mobile_project/views/sign_up_page.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
 
-class CodeInputPage extends StatelessWidget {
-  CodeInputPage({super.key, required this.phone});
-  final TextEditingController _inputController = TextEditingController();
-  final _authController = Get.put(AuthController());
+class CodeInputPage extends StatefulWidget {
+  const CodeInputPage({super.key, required this.phone});
   final String phone;
+
+  @override
+  State<CodeInputPage> createState() => _CodeInputPageState();
+}
+
+class _CodeInputPageState extends State<CodeInputPage> {
+  final TextEditingController _inputController = TextEditingController();
+
+  final _authController = Get.put(AuthController());
+  bool _isChecked = false;
+
+  // void openBottomSheet() {
+  //   Get.bottomSheet(
+  //     SingleChildScrollView(
+  //       scrollDirection: Axis.vertical,
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(20.0),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             SizedBox(height: 25),
+  //             Text(
+  //               '회원 가입 필요',
+  //               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+  //             ),
+  //             SizedBox(
+  //               height: 8,
+  //             ),
+  //             Divider(
+  //               thickness: 1.0,
+  //             ),
+  //             CheckboxListTile(
+  //               controlAffinity: ListTileControlAffinity.leading,
+  //               title: Text('I agree to the Terms and Conditions'),
+  //               value: _isChecked,
+  //               onChanged: (bool? value) {
+  //                 setState(() {
+  //                   _isChecked = value!;
+  //                 });
+  //               },
+  //             ),
+  //             Row(
+  //               children: [
+  //                 Text('afds'),
+  //               ],
+  //             ),
+  //             SizedBox(
+  //               height: 200,
+  //             ),
+  //             SizedBox(
+  //               width: double.infinity,
+  //               child: ElevatedButton(
+  //                 child: Text("동의하고 가입하기",
+  //                     style:
+  //                         TextStyle(fontSize: 21, fontWeight: FontWeight.w500)),
+  //                 onPressed: () {
+  //                   Get.back();
+  //                 },
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 20,
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //     backgroundColor: Colors.white,
+  //     elevation: 0,
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,11 +117,18 @@ class CodeInputPage extends StatelessWidget {
                 // HomePage로 이동
                 if (_inputController.text.isNotEmpty) {
                   final verify = await _authController.checkCode(
-                      phone, _inputController.text);
+                      widget.phone, _inputController.text);
                   if (verify) {
-                    final isSigned = await _authController.checkSignedUp(phone);
+                    final isSigned =
+                        await _authController.checkSignedUp(widget.phone);
                     if (isSigned) {
+                      print('가입된 계정');
                       Get.off(HomePage());
+                    } else {
+                      //openBottomSheet();
+                      //Get.off(() => SignUpPage());
+                      print('가입 안된 계정');
+                      _showBottomSheet(context);
                     }
                   }
                 } else {}
@@ -55,6 +137,75 @@ class CodeInputPage extends StatelessWidget {
           ),
         ]),
       ),
+    );
+  }
+
+  Future<void> _showBottomSheet(BuildContext context) {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 500,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 25),
+                  Text(
+                    '서비스 동의',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Divider(
+                    thickness: 1.0,
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                        checkColor: Colors.white,
+                        value: _isChecked,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isChecked = value!;
+                          });
+                        },
+                      ),
+                      Text('[필수] 이용약관')
+                    ],
+                  ),
+                  SizedBox(
+                    height: 180,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      child: Text("동의하고 가입하기",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w400)),
+                      onPressed: () async {
+                        if (_isChecked == true) {
+                          final result = await _authController.signUp(
+                              widget.phone, _inputController.text);
+                          if (result) {
+                            Get.off(HomePage());
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
