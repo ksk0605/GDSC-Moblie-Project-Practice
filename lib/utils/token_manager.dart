@@ -4,20 +4,15 @@ import '../data.dart';
 mixin TokenManager {
   final box = GetStorage();
 
-  String readToken(String key) {
-    return box.read(key);
+  String? readToken(String tokenKey) {
+    return box.read(tokenKey);
   }
 
-  void writeToken(
-      {required String access_token, required String refresh_token}) {
-    print(access_token);
-    print(refresh_token);
-    box.write(ACCESS_TOKEN_KEY, access_token);
-    box.write(REFRESH_TOKEN_KEY, refresh_token);
+  Future<void> writeToken(String tokenKey, String token) async {
+    await box.write(tokenKey, token);
   }
 
-  void removeToken() {
-    box.remove(ACCESS_TOKEN_KEY);
-    box.remove(REFRESH_TOKEN_KEY);
+  Future<void> removeToken(String tokenKey) async {
+    await box.remove(tokenKey);
   }
 }

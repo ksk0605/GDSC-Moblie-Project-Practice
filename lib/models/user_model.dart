@@ -3,7 +3,7 @@ part 'user_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class UserModel {
-  final id;
+  final int id;
   final String? username;
   final String phone;
 
