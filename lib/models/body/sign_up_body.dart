@@ -4,9 +4,9 @@ part 'sign_up_body.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class SignUpBody {
-  final String data;
+  final DateTime terms_accepted_at;
 
-  SignUpBody({required this.data});
+  SignUpBody({required this.terms_accepted_at});
 
   factory SignUpBody.fromJson(
     Map<String, dynamic> json,

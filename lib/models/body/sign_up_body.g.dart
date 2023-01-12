@@ -7,10 +7,10 @@ part of 'sign_up_body.dart';
 // **************************************************************************
 
 SignUpBody _$SignUpBodyFromJson(Map<String, dynamic> json) => SignUpBody(
-      data: json['data'] as String,
+      terms_accepted_at: DateTime.parse(json['terms_accepted_at'] as String),
     );
 
 Map<String, dynamic> _$SignUpBodyToJson(SignUpBody instance) =>
     <String, dynamic>{
-      'data': instance.data,
+      'terms_accepted_at': instance.terms_accepted_at.toIso8601String(),
     };

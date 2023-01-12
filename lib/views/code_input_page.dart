@@ -15,7 +15,7 @@ class CodeInputPage extends StatefulWidget {
 }
 
 class _CodeInputPageState extends State<CodeInputPage> {
-  final TextEditingController _inputController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
 
   final _authController = Get.put(AuthController());
   bool _isChecked = false;
@@ -36,7 +36,7 @@ class _CodeInputPageState extends State<CodeInputPage> {
         child: Column(children: [
           TextField(
             keyboardType: TextInputType.phone,
-            controller: _inputController,
+            controller: _codeController,
             decoration: InputDecoration(
               hintText: "인증번호 입력",
               // 테두리
@@ -51,18 +51,18 @@ class _CodeInputPageState extends State<CodeInputPage> {
               child: Text("완료", style: TextStyle(fontSize: 21)),
               onPressed: () async {
                 // HomePage로 이동
-                if (_inputController.text.isNotEmpty) {
+                if (_codeController.text.isNotEmpty) {
                   final verify = await _authController.checkCode(
-                      widget.phone, _inputController.text);
+                      widget.phone, _codeController.text);
                   if (verify) {
                     final isSigned =
                         await _authController.checkSignedUp(widget.phone);
                     if (isSigned) {
                       print('가입된 계정');
+                      await _authController.login(
+                          widget.phone, _codeController.text);
                       Get.off(HomePage());
                     } else {
-                      //openBottomSheet();
-                      //Get.off(() => SignUpPage());
                       print('가입 안된 계정');
                       await _showBottomSheet(context);
                     }
@@ -128,7 +128,7 @@ class _CodeInputPageState extends State<CodeInputPage> {
                         onPressed: () async {
                           if (_isChecked == true) {
                             final result = await _authController.signUp(
-                                widget.phone, _inputController.text);
+                                widget.phone, _codeController.text);
                             if (result) {
                               Get.offAll(HomePage());
                             }
