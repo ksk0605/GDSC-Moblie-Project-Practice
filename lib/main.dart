@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_mobile_project/views/phone_verity_page.dart';
+import 'package:gdsc_mobile_project/views/splash_page.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.amber,
       ),
       debugShowCheckedModeBanner: false,
-      home: PhoneNumberVerificationPage(),
+      home: SplashPage(),
     );
   }
 }
