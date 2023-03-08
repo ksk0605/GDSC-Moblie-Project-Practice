@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_mobile_project/utils/app_style.dart';
 
 class PostCard extends StatelessWidget {
   final String title;
@@ -20,11 +21,11 @@ class PostCard extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: Styles.titleText,
             ),
             Text(
               description,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+              style: Styles.descriptionText,
             )
           ]),
         ),
