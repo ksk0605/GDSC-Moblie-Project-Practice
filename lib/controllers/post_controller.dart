@@ -6,12 +6,19 @@ import 'package:get/get.dart';
 class PostController extends GetxController {
   AuthController authCtrl = Get.find<AuthController>();
   final PostService postService = PostService();
-  //List<post>
+  RxList<Post?> posts = <Post?>[].obs;
   Post? post;
+
+  @override
+  void onInit() {
+    getPost();
+    super.onInit();
+  }
 
   Future<bool> writePost(
       {required String title, required String description}) async {
     try {
+      print(authCtrl.currentUser);
       final Post? result = await postService.writePost(
           title: title,
           description: description,
@@ -19,12 +26,16 @@ class PostController extends GetxController {
       post = result!;
       return true;
     } catch (e) {
+      print(e);
       return false;
     }
   }
 
-  Post? getPost() {
-    return post;
+  getPost() async {
+    final result = await postService.getPosts();
+    if (result != null) {
+      posts.value = result;
+    }
   }
 
   //Future<List<PostMo>> getPosts

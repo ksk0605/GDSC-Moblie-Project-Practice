@@ -8,29 +8,13 @@ import 'package:gdsc_mobile_project/utils/app_style.dart';
 import 'package:gdsc_mobile_project/widgets/post_card.dart';
 import 'package:get/get.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   final authController = Get.put(AuthController());
-
   final titleController = TextEditingController();
-
   final descriptionContorller = TextEditingController();
-
   final postController = Get.put(PostController());
-
-  Post? post;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    post = postController.getPost();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,19 +27,26 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: post == null
-          ? Center(
-              child: Text('나의 기분을 작성해주세요!'),
-            )
-          : Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Center(
-                child: PostCard(
-                  title: post!.title,
-                  description: post!.description,
-                ),
-              ),
-            ),
+      body: Obx(
+        () => postController.posts.isEmpty
+            ? Center(
+                child: Text('나의 기분을 작성해주세요!'),
+              )
+            : ListView.builder(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                itemCount: postController.posts.length,
+                itemBuilder: (context, index) {
+                  final post = postController.posts[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 10),
+                    child: PostCard(
+                      title: post!.title,
+                      description: post.description,
+                    ),
+                  );
+                }),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<String>(
             barrierDismissible: false,
@@ -68,11 +59,9 @@ class _HomePageState extends State<HomePage> {
                   final result = await postController.writePost(
                       title: titleController.text,
                       description: descriptionContorller.text);
-                  setState(() {
-                    post = postController.getPost();
-                  });
                   titleController.clear();
                   descriptionContorller.clear();
+                  postController.getPost();
                   Get.back();
                   if (result) {
                     Get.snackbar('글쓰기', '글쓰기 성공',

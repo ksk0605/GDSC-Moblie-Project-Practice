@@ -48,17 +48,35 @@ class AuthController extends GetxController with TokenManager {
   }
 
   Future<void> checkTokenState() async {
-    String? token = readToken(ACCESS_TOKEN_KEY);
+    // String? token = readToken(ACCESS_TOKEN_KEY);
 
-    print(token);
+    // print(token);
 
-    if (token != null) {
-      UserModel? user = await userService.getUser();
-      currentUser.value = user;
-      _moveToHome();
-    } else {
+    // if (token != null) {
+    //   UserModel? user = await userService.getUser();
+    //   currentUser.value = user;
+    //   _moveToHome();
+    // } else {
+    //   _moveToCodeCheck();
+    // }
+    String? accessToken = readToken(ACCESS_TOKEN_KEY);
+    print(accessToken);
+    if (accessToken == null || accessToken.isEmpty) {
       _moveToCodeCheck();
+      return;
     }
+    userService.getUser().then((user) {
+      print(user);
+      if (user is UserModel) {
+        print(user);
+        currentUser.value = user;
+        _moveToHome();
+        return;
+      } else {
+        _moveToCodeCheck();
+        return;
+      }
+    });
   }
 
   void _moveToCodeCheck() {

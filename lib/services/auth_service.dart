@@ -90,12 +90,13 @@ class AuthService with TokenManager {
       );
       print('로그인 결과');
       print(res);
-      final tokens = LoginResponse.fromJson(res.data);
-
+      final tokens = LoginResponse.fromJson(res.data['token']);
+      print('토큰 모델 생성 성공');
       writeToken(ACCESS_TOKEN_KEY, tokens.accessToken);
       writeToken(REFRESH_TOKEN_KEY, tokens.refreshToken);
       return true;
     } catch (e) {
+      print(e);
       return false;
     }
   }

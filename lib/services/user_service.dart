@@ -10,7 +10,9 @@ class UserService with TokenManager {
 
   Future<UserModel?> getUser() async {
     String? access_key = readToken(ACCESS_TOKEN_KEY);
+    print(access_key);
     try {
+      print(url);
       final res = await Dio().get(url,
           options: Options(headers: {
             "Authorization": "Bearer ${readToken(ACCESS_TOKEN_KEY)}"
@@ -23,6 +25,7 @@ class UserService with TokenManager {
       final user = userData.user;
       return user;
     } catch (e) {
+      print(e);
       return null;
     }
   }

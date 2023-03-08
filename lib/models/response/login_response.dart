@@ -4,7 +4,9 @@ part 'login_response.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class LoginResponse {
+  @JsonKey(name: 'access_token')
   final String accessToken;
+  @JsonKey(name: 'refresh_token')
   final String refreshToken;
 
   LoginResponse({

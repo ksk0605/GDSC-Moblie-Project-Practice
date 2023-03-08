@@ -16,4 +16,8 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 
   Map<String, dynamic> toJson() => _$PostToJson(this);
+
+  static List<Post> fromJsonList(List list) {
+    return list.map((item) => Post.fromJson(item)).toList();
+  }
 }

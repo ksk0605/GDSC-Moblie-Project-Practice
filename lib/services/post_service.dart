@@ -12,7 +12,9 @@ class PostService with TokenManager {
       required String description,
       required int id}) async {
     try {
+      print('asd');
       final token = readToken(ACCESS_TOKEN_KEY);
+      print(token);
       final res = await Dio().post(url,
           options: Options(headers: {"Authorization": "Bearer $token"}),
           data: {
@@ -23,6 +25,21 @@ class PostService with TokenManager {
       final post = Post.fromJson(res.data['post']);
       print(post);
       return post;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<List<Post>?> getPosts() async {
+    try {
+      final res = await Dio().get(url,
+          options: Options(headers: {
+            'Authorization': 'Bearer ${readToken(ACCESS_TOKEN_KEY)}'
+          }));
+      print(res.data);
+      final posts = Post.fromJsonList(res.data['posts']);
+      return posts;
     } catch (e) {
       print(e);
       return null;
