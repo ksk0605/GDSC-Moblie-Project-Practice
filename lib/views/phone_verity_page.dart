@@ -65,8 +65,9 @@ class _PhoneNumberVerificationPageState
                 if (_formKey.currentState!.validate()) {
                   final isOk =
                       await _authController.getCode(_inputController.text);
+                  print(isOk);
                   if (isOk) {
-                    Get.off(CodeInputPage());
+                    Get.off(() => CodeInputPage(phone: _inputController.text));
                   }
                 }
               },

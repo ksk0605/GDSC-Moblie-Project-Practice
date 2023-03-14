@@ -1,15 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_model.dart';
+part of 'code_check_body.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AuthModel _$AuthModelFromJson(Map<String, dynamic> json) => AuthModel(
+CodeCheckBody _$CodeCheckBodyFromJson(Map<String, dynamic> json) =>
+    CodeCheckBody(
       phone: json['phone'] as String,
+      code: json['code'] as String,
     );
 
-Map<String, dynamic> _$AuthModelToJson(AuthModel instance) => <String, dynamic>{
+Map<String, dynamic> _$CodeCheckBodyToJson(CodeCheckBody instance) =>
+    <String, dynamic>{
       'phone': instance.phone,
+      'code': instance.code,
     };
